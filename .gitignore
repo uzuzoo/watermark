@@ -1,2 +1,6 @@
-#
+# Directories
 examples/tempimages/**
+vendor/
+
+# Files
+TODO.md

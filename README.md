@@ -45,13 +45,13 @@ $params = array(
   'InputFile' => 'images/image.jpg',
 );
 
-// Instanciate the Watermark Class
+// Instantiate the Watermark Class
 $wm = new Watermark($params);
 
 // Start the Watermarking process
 $result = $wm->apply();
 
-// Return the watermarked Image path & filename
+// Return the watermarked File path & filename
 $output = $wm->getOutput();
 ```
 

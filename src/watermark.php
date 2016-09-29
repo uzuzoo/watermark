@@ -121,7 +121,7 @@ class Watermark
   public $WmImageWidth = 100;
 
   /**
-   * @var int 0 to 100, 100 = Opaque
+   * @var int 0 to 100: 100 is Opaque
    */
   public $WmImageOpacity = 100;
 
