@@ -1,5 +1,5 @@
 <?php
-namespace Watermark;
+namespace uzuzoo\Watermark;
 /**
  * Watermark PDF Files
  *

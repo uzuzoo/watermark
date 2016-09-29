@@ -1,5 +1,5 @@
 <?php
-namespace Watermark;
+namespace uzuzoo\Watermark;
 /**
  * Watermark Image Files of type jpg,png,gif
  * requires GD Library
