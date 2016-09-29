@@ -1,5 +1,6 @@
 <?php
 namespace uzuzoo\Watermark;
+use uzuzoo\Watermark\WatermarkImage;
 /**
  * Watermark Files of different Types
  * requires GD Library
