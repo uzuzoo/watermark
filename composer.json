@@ -8,16 +8,16 @@
   "authors": [
       {
           "name": "Alec Wright",
-          "email": "alec@intrica.net",
+          "email": "alec@intrica.net"
       }
   ],
   "require": {
       "setasign/fpdf": "1.8.1",
       "setasign/fpdi": "1.6.1"
-  }
+  },
   "autoload": {
         "psr-4": {
             "uzuzoo\\watermark\\": "src/"
         }
-},
+      }
 }

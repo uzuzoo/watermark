@@ -1,6 +1,6 @@
 <?php
 /**
- * Watermark Image Files of
+ * Watermark Image Files of type jpg,png,gif
  * requires GD Library
  *
  *
