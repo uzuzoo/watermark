@@ -1,5 +1,5 @@
 <?php
-require_once 'watermark/image.php';
+namespace Watermark;
 /**
  * Watermark Files of different Types
  * requires GD Library

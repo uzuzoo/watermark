@@ -1,4 +1,5 @@
 <?php
+namespace Watermark;
 /**
  * Watermark PDF Files
  *

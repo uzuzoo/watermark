@@ -1,4 +1,5 @@
 <?php
+namespace Watermark;
 /**
  * Watermark Image Files of type jpg,png,gif
  * requires GD Library
