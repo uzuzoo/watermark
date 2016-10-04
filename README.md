@@ -1,4 +1,4 @@
-# Watermark (1)
+# Watermark
 
 This package was created to allow watermarking of various file types.
 
