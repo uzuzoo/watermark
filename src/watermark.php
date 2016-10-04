@@ -1,6 +1,4 @@
 <?php
-namespace Uzuzoo\Watermark;
-
 /**
  * Watermark Files of different Types
  * requires GD Library
@@ -11,6 +9,9 @@ namespace Uzuzoo\Watermark;
  * @version 1.0.0
  * @copyright Copyright 2016, intrica.net
  */
+
+namespace Uzuzoo\Watermark;
+
 class Watermark
 {
   /**

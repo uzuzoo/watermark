@@ -1,5 +1,4 @@
 <?php
-namespace Uzuzoo\Watermark\WatermarkImage;
 /**
  * Watermark Image Files of type jpg,png,gif
  * requires GD Library
@@ -9,6 +8,10 @@ namespace Uzuzoo\Watermark\WatermarkImage;
  * @version 1.0.0
  * @copyright Copyright 2016, intrica.net
  */
+
+namespace Uzuzoo\Watermark\Watermark;
+
+
 class WatermarkImage
 {
   /**

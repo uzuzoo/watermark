@@ -1,5 +1,4 @@
 <?php
-namespace uzuzoo\Watermark;
 /**
  * Watermark PDF Files
  *
@@ -8,6 +7,9 @@ namespace uzuzoo\Watermark;
  * @version 1.0.0
  * @copyright Copyright 2016, intrica.net
  */
+
+namespace Uzuzoo\Watermark\Watermark;
+
 class WatermarkPdf
 {
   /**
