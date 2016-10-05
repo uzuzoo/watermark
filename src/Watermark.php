@@ -245,7 +245,7 @@ class Watermark
   );
 
 
-
+ 
 
   public function __construct($params = array())
   {
