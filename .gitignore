@@ -1,4 +1,7 @@
 # Directories
+/vendor/
+/examples/
 
 # Files
+composer.lock
 TODO.md
