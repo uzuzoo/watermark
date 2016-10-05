@@ -10,7 +10,8 @@
  * @copyright Copyright 2016, intrica.net
  */
 
-namespace Uzuzoo\Watermark;
+ namespace Uzuzoo\Watermark;
+ use Uzuzoo\Watermark\Watermark\Image;
 
 class Watermark
 {
@@ -268,7 +269,7 @@ class Watermark
     $this->validate();
 
     if ($this->isInputAnImage()) {
-      if(($WmProcess = new WatermarkImage($this)) && ($WmProcess->process())) {
+      if(($WmProcess = new Image($this)) && ($WmProcess->process())) {
           $ret = TRUE;
       } else {
         # ????????

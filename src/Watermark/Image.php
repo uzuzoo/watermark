@@ -10,9 +10,9 @@
  */
 
 namespace Uzuzoo\Watermark\Watermark;
+use Uzuzoo\Watermark\Watermark;
 
-
-class WatermarkImage
+class Image
 {
   /**
    * @var Watermark container for the Watermark Class
