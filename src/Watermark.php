@@ -251,7 +251,7 @@ class Watermark
   {
     // Check the GD Library Exists
     if (!$this->gdLibraryExists()) {
-      throw new Exception("Error: GD Library is not installed on this web sever");
+      throw new \Exception("Error: GD Library is not installed on this web sever");
     }
     $this->setFonts();
     $this->setParams($params);
@@ -277,7 +277,7 @@ class Watermark
         # ????????
       }
     } else {
-      throw new Exception("Error: Input File of type ".$this->getInputFileType()." is not currently supported for watermarking.");
+      throw new \Exception("Error: Input File of type ".$this->getInputFileType()." is not currently supported for watermarking.");
     }
     return $ret;
   }
@@ -293,7 +293,7 @@ class Watermark
     // Lets set any extra settings
     $pathInfo = pathinfo($this->getInputFile());
     if ((!$this->getInputFile()) || (!$pathInfo['basename']) || (!isset($pathInfo['extension']))) {
-      throw new Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." could not be successfully used.");
+      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." could not be successfully used.");
     }
 
     if ($fileType = $this->getFileType($this->getInputFile())) {
@@ -301,7 +301,7 @@ class Watermark
       $this->setInputFileExt(strtolower($pathInfo['extension']));
       $this->setInputFileType($fileType);
     } else {
-      throw new Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." does has an unsupported Mime Type.");
+      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." does has an unsupported Mime Type.");
     }
     // Set the OutputFileName
     $this->setOutputFileName($this->createOutputFileName());
@@ -320,7 +320,7 @@ class Watermark
         break;
 
       default:
-        throw new Exception("Error: An Invalid Type has been specified.");
+        throw new \Exception("Error: An Invalid Type has been specified.");
         break;
     }
   }
@@ -330,39 +330,39 @@ class Watermark
   {
     // Check InputFile has supported extension
     if (!array_key_exists($this->getInputFileExt(), $this->inputExt)) {
-      throw new Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." has an unsupported Extention of (".$this->getInputFileExt()."). Supported Extensions are [".implode("|", array_keys($this->inputExt))."].");
+      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." has an unsupported Extention of (".$this->getInputFileExt()."). Supported Extensions are [".implode("|", array_keys($this->inputExt))."].");
     }
 
     // Check InputFile has supported mime type
     if (!in_array($this->getInputFileType(), $this->inputExt[$this->getInputFileExt()]['mimetypes'])) {
-      throw new Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." has an unsupported Mime Type of (".$this->getInputFileType()."). Supported Mime Types for ".$this->getInputFileExt()." are [".implode("|", $this->inputExt[$this->getInputFileExt()]['mimetypes'])."].");
+      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." has an unsupported Mime Type of (".$this->getInputFileType()."). Supported Mime Types for ".$this->getInputFileExt()." are [".implode("|", $this->inputExt[$this->getInputFileExt()]['mimetypes'])."].");
     }
 
     // Check InputFile is readable
     if ((!file_exists($this->getInputFile())) || (!is_readable($this->getInputFile()))) {
-      throw new Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." does not exist or is not readable.");
+      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." does not exist or is not readable.");
     }
 
     // Check OutputPath exists and is writable
     if ((!is_dir($this->getOutputPath()) || (!is_writable($this->getOutputPath())))) {
-      throw new Exception("(OutputPath) Error: The OutputPath ".$this->getOutputPath()." does not exist or is not writable.");
+      throw new \Exception("(OutputPath) Error: The OutputPath ".$this->getOutputPath()." does not exist or is not writable.");
     }
 
     // Check that the resulting OutputFile Name doesn't already exist
     if (!$this->getOutputFileOverwrite()) {
       if (file_exists($this->getOutputPath().$this->getOutputFileName())) {
-        throw new Exception("(OutputPath) Error: The OutputPath ".$this->getOutputPath()." already has a file called ".$this->getOutputFileName()." and overwriting is disabled.");
+        throw new \Exception("(OutputPath) Error: The OutputPath ".$this->getOutputPath()." already has a file called ".$this->getOutputFileName()." and overwriting is disabled.");
       }
     }
 
     // check valid Position
     if (!in_array($this->getWmPosition(), $this->positions)) {
-      throw new Exception("(WmPosition) Error: The position has an invalid value of ".$this->getWmPosition().".");
+      throw new \Exception("(WmPosition) Error: The position has an invalid value of ".$this->getWmPosition().".");
     }
 
     // check valid Padding
     if (!is_int($this->getWmPadding())) {
-      throw new Exception("(WmPadding) Error: The padding must be an integer.");
+      throw new \Exception("(WmPadding) Error: The padding must be an integer.");
     }
   }
 
@@ -371,25 +371,25 @@ class Watermark
   {
     // check font is installed
     if (!in_array($this->getWmFont(), $this->fonts)) {
-      throw new Exception("(WmFont) Error: The Font ".$this->getWmFont()." is not installed.");
+      throw new \Exception("(WmFont) Error: The Font ".$this->getWmFont()." is not installed.");
     }
     // Check if FontSize is set
     if ((!is_int($this->getWmFontSize())) || (!($this->getWmFontSize() >= $this->minFontSize))) {
-      throw new Exception("(WmFontSize) Error: The Font Size has an invalid value of ".$this->getWmFontSize().". Valid values are an integer ".$this->minFontSize." or above.");
+      throw new \Exception("(WmFontSize) Error: The Font Size has an invalid value of ".$this->getWmFontSize().". Valid values are an integer ".$this->minFontSize." or above.");
     }
     // Check Font Angle is set
     if ((!is_int($this->getWmFontAngle())) || (!($this->getWmFontAngle() >= $this->minFontAngle)) || (!($this->getWmFontAngle() <= $this->maxFontAngle))) {
-      throw new Exception("(WmFontAngle) Error: The Font Angle has an invalid value of ".$this->getWmFontAngle().". Valid values are integers between ".$this->minFontAngle." and ".$this->maxFontAngle.".");
+      throw new \Exception("(WmFontAngle) Error: The Font Angle has an invalid value of ".$this->getWmFontAngle().". Valid values are integers between ".$this->minFontAngle." and ".$this->maxFontAngle.".");
     }
     // Check FontColour has valid values
     if (($colourParts = explode(",", $this->getWmFontColour())) && (count($colourParts) == 3)) {
       foreach ($colourParts as $key => $colourValue) {
         if ((!($colourValue >= $this->minFontColour)) || (!($colourValue <= $this->maxFontColour))) {
-          throw new Exception("(WmFontColour) Error: The Font Colour must have 3 values between ".$this->minFontColour." and ".$this->maxFontColour.". Submitted values '".$this->getWmFontColour()."'.");
+          throw new \Exception("(WmFontColour) Error: The Font Colour must have 3 values between ".$this->minFontColour." and ".$this->maxFontColour.". Submitted values '".$this->getWmFontColour()."'.");
         }
       }
     } else {
-      throw new Exception("(WmFontColour) Error: The Font Colour must have 3 values for RGB delimited by ',' comma. Submitted values '".$this->getWmFontColour()."'.");
+      throw new \Exception("(WmFontColour) Error: The Font Colour must have 3 values for RGB delimited by ',' comma. Submitted values '".$this->getWmFontColour()."'.");
     }
   }
 
@@ -397,39 +397,39 @@ class Watermark
   {
     $pathInfo = pathinfo($this->getWmImage());
     if ((!$this->getWmImage()) || (!$pathInfo['basename']) || (!isset($pathInfo['extension']))) {
-      throw new Exception("(WmImage) Error: The Watermark Image ".$this->getWmImage()." could not be successfully used.");
+      throw new \Exception("(WmImage) Error: The Watermark Image ".$this->getWmImage()." could not be successfully used.");
     }
     $this->setWmImageExt(strtolower($pathInfo['extension']));
 
     // Check Watermark File Exists and is readable
     if ((!file_exists($this->getWmImage())) || (!is_readable($this->getWmImage()))) {
-      throw new Exception("(InputFile) Error: The Watermark Image ".$this->getWmImage()." does not exist or is not readable.");
+      throw new \Exception("(InputFile) Error: The Watermark Image ".$this->getWmImage()." does not exist or is not readable.");
     }
 
     // Check Watermark File has supported extension
     if (!array_key_exists($this->getWmImageExt(), $this->watermarkExt)) {
-      throw new Exception("(WmImage) Error: The Watermark Image ".$this->getWmImage()." has an unsupported Extention of (".$this->getWmImageExt()."). Supported Extensions are [".implode("|", array_keys($this->watermarkExt))."].");
+      throw new \Exception("(WmImage) Error: The Watermark Image ".$this->getWmImage()." has an unsupported Extention of (".$this->getWmImageExt()."). Supported Extensions are [".implode("|", array_keys($this->watermarkExt))."].");
     }
 
     // Check Watermark File has supported mime type
     $fileType = $this->getFileType($this->getWmImage());
     if (!in_array($fileType, $this->watermarkExt[$this->getWmImageExt()])) {
-      throw new Exception("(WmImage) Error: The Watermark Image ".$this->getWmImage()." has an unsupported Mime Type of (".$fileType."). Supported Mime Types for ".$this->getWmImageExt()." are [".implode("|", $this->watermarkExt[$this->getWmImageExt()])."].");
+      throw new \Exception("(WmImage) Error: The Watermark Image ".$this->getWmImage()." has an unsupported Mime Type of (".$fileType."). Supported Mime Types for ".$this->getWmImageExt()." are [".implode("|", $this->watermarkExt[$this->getWmImageExt()])."].");
     }
 
     // Check Watermark Height
     if ((!is_int($this->getWmImageHeight())) || (!($this->getWmImageHeight() >= $this->minHeight))) {
-      throw new Exception("(WmImageHeight) Error: The Watermark Image Height has an invalid value. A valid value must be an integer of ".$this->minHeight." or above.");
+      throw new \Exception("(WmImageHeight) Error: The Watermark Image Height has an invalid value. A valid value must be an integer of ".$this->minHeight." or above.");
     }
 
     // Check Watermark Width
     if ((!is_int($this->getWmImageWidth())) || (!($this->getWmImageWidth() >= $this->minWidth))) {
-      throw new Exception("(WmImageWidth) Error: The Watermark Image Width has an invalid value. A valid value must be an integer of ".$this->minWidth." or above.");
+      throw new \Exception("(WmImageWidth) Error: The Watermark Image Width has an invalid value. A valid value must be an integer of ".$this->minWidth." or above.");
     }
 
     // Check Watermark Opacity
     if ((!is_int($this->getWmImageOpacity())) || (($this->getWmImageOpacity() < $this->minOpacity)) || (($this->getWmImageOpacity() > $this->maxOpacity))) {
-      throw new Exception("(WmImageWidth) Error: The Watermark Image Opacity has an invalid value. A valid value must be an integer between ".$this->minOpacity." and ".$this->maxOpacity.".");
+      throw new \Exception("(WmImageWidth) Error: The Watermark Image Opacity has an invalid value. A valid value must be an integer between ".$this->minOpacity." and ".$this->maxOpacity.".");
     }
   }
 
@@ -930,24 +930,24 @@ class Watermark
   {
     // Check that the fontFile exists and is readable
     if ((!file_exists($fontFile)) || (!is_file($fontFile)) || (!is_readable($fontFile))) {
-      throw new Exception("Error: The FontFile ".$fontFile." does not exist, or is not readable.");
+      throw new \Exception("Error: The FontFile ".$fontFile." does not exist, or is not readable.");
     }
 
     $pathInfo = pathinfo($fontFile);
     // Check that the fontFile has a valid extension
     if (!in_array($pathInfo['extension'], $this->fontExt)) {
-      throw new Exception("Error: The FontFile ".$fontFile." must be a TrueType Font and have an extension of (".implode("|", $this->fontExt).").");
+      throw new \Exception("Error: The FontFile ".$fontFile." must be a TrueType Font and have an extension of (".implode("|", $this->fontExt).").");
     }
 
     // Check that the fontFile doesn't already exist
     if (file_exists($this->getFontsPath().$pathInfo['basename'])) {
-      throw new Exception("Error: There is already a font installed with the name ".$pathInfo['basename'].".");
+      throw new \Exception("Error: There is already a font installed with the name ".$pathInfo['basename'].".");
     }
 
     // Copy FontFile to Fonts Folder
     if((!($font = file_get_contents($fontFile))) || (!(file_put_contents($this->getFontsPath().$pathInfo['basename'], $font))))
     {
-      throw new Exception("Error: There was a problem Installing FontFile ".$fontFile." into folder ".$this->getFontsPath());
+      throw new \Exception("Error: There was a problem Installing FontFile ".$fontFile." into folder ".$this->getFontsPath());
     }
 
     // Refrash the fonts list
@@ -958,14 +958,14 @@ class Watermark
   {
     // Check the font name is Installed
     if (!in_array($fontName, $this->fonts)) {
-      throw new Exception("Error: Font ".$fontName." does not seem to be installed.");
+      throw new \Exception("Error: Font ".$fontName." does not seem to be installed.");
     }
     // Check that the fontFile exists and the font directory is writable
     if ((!file_exists($this->getFontsPath().$fontName)) ||  (!is_writable($this->getFontsPath()))) {
-      throw new Exception("Error: Font ".$fontName." does not exist or can not be uninstalled.");
+      throw new \Exception("Error: Font ".$fontName." does not exist or can not be uninstalled.");
     }
     if (!unlink($this->getFontsPath().$fontName)) {
-      throw new Exception("Error: There was a problem uninstalling the font ".$fontName.".");
+      throw new \Exception("Error: There was a problem uninstalling the font ".$fontName.".");
     }
   }
 
