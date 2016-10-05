@@ -17,7 +17,9 @@
   },
   "autoload": {
     "psr-4": {
-        "uzuzoo\\watermark\\": "src/"
+      "php": ">=5.3.0",
+      "ext-gd": "*",
+      "Uzuzoo\\Watermark\\": "src/"
     }
   }
 }
