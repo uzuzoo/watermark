@@ -37,10 +37,7 @@ There are also methods to install and uninstall TrueType Fonts.
 
 
 ## Basic Usage
-`$params` can be specified on `$wm = new Watermark($params);`
-<br>or can be set with setters `$wm->setInputFile($params['InputFile']);`
-<br>or optionally be sent on the `$wm->apply($params);` method
-<br>or a mixture of either.
+
 ```php
 <?php
 use Uzuzoo\Watermark\Watermark;
