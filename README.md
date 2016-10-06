@@ -68,8 +68,9 @@ try {
 ```
 
 ## Options
-Options can be passed, as an array, into the constructor of Watermark or on the apply method.<br>
-Alternatively, each option has a getter and setter, and can used by prefixing the option name with set or get respectively. E.G. to set the InputFile use `$wm->setInputFile()` and to get `$wm->getInputFile()`
+Options can be passed, as an array, into the constructor of Watermark or on the apply method. Alternatively, each option has a getter and setter, and can used by prefixing the option name with set or get respectively.
+
+E.G. to set the InputFile use `$wm->setInputFile($path_to_file)` and to get `$wm->getInputFile()`
 
 | Option Name |  Default | Type | Description |
 |-------------|----------|------|-------------|
