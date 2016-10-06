@@ -11,22 +11,12 @@
 
 namespace Uzuzoo\Watermark\Watermark;
 use Uzuzoo\Watermark\Watermark;
+use Uzuzoo\Watermark\Watermark\WmAbstract;
 
-class Image
+class Image extends WmAbstract
 {
   /**
-   * @var Watermark container for the Watermark Class
-   */
-  private $Wm = FALSE;
-
-
-  public function __construct(Watermark $Wm)
-  {
-    $this->Wm = $Wm;
-  }
-
-  /**
-   * Process The Watermarking
+   * @inheritDoc
    */
   public function process()
   {
@@ -48,11 +38,10 @@ class Image
       # Destroy temp images
       imagedestroy($wmSource);
     } else {
-      $colourParts = explode(",", $this->Wm->getWmFontColour());
-      $colour = imagecolorallocate($imSource, $colourParts[0], $colourParts[1], $colourParts[2]);
+      $textColour = $this->Wm->getAllocatedColour($imSource, $this->Wm->getWmFontColour());
       // Get Watermark Text Position
       $wmPosition = $this->getWmTextPosition($imSource, $this->Wm->getWmPosition(), $this->Wm->getWmFontSize(), $this->Wm->getWmFontAngle(), $this->Wm->getFontPathFilename(), $this->Wm->getWmText(), $this->Wm->getWmPadding());
-      imagettftext($imSource, $this->Wm->getWmFontSize(), $this->Wm->getWmFontAngle(), $wmPosition['x'], $wmPosition['y'], $colour, $this->Wm->getFontPathFilename(), $this->Wm->getWmText());
+      imagettftext($imSource, $this->Wm->getWmFontSize(), $this->Wm->getWmFontAngle(), $wmPosition['x'], $wmPosition['y'], $textColour, $this->Wm->getFontPathFilename(), $this->Wm->getWmText());
     }
     // Save image
     $ret = $this->saveImage($this->Wm->getInputFileExt(), $imSource, $this->Wm->getOutput());

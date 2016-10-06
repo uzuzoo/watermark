@@ -10,8 +10,10 @@
  * @copyright Copyright 2016, intrica.net
  */
 
- namespace Uzuzoo\Watermark;
- use Uzuzoo\Watermark\Watermark\Image;
+namespace Uzuzoo\Watermark;
+use Uzuzoo\Watermark\Watermark\Image;
+use Uzuzoo\Watermark\Watermark\Pdf;
+
 
 class Watermark
 {
@@ -60,7 +62,7 @@ class Watermark
    * Path to the Fonts
    * @var string
    */
-  public $FontsPath = __DIR__.'/watermark/fonts/';
+  public $FontsPath = __DIR__.'/Watermark/Fonts/';
 
   /**
    * @var string
@@ -185,6 +187,7 @@ class Watermark
   const POS_BOTTOM_RIGHT  = 9;
 
   const FILETYPE_IMAGE    = 1;
+  const FILETYPE_PDF      = 2;
 
   const FONT_COLOUR_BLACK = '0,0,0';
   const FONT_COLOUR_GREY = '128,128,128';
@@ -230,6 +233,12 @@ class Watermark
         'image/png'
       ),
     ),
+    'pdf'   => array(
+      'filetype'  => self::FILETYPE_PDF,
+      'mimetypes' => array(
+        'application/pdf'
+      ),
+    ),
   );
 
   private $watermarkExt = array(
@@ -245,7 +254,7 @@ class Watermark
   );
 
 
- 
+
 
   public function __construct($params = array())
   {
@@ -276,6 +285,15 @@ class Watermark
         # Need to get any process errors
         # ????????
       }
+    } elseif ($this->isInputAnPdf()) {
+      if(($WmProcess = new Pdf($this)) && ($WmProcess->process())) {
+          $ret = TRUE;
+      } else {
+        # ????????
+        # Need to get any process errors
+        # ????????
+      }
+
     } else {
       throw new \Exception("Error: Input File of type ".$this->getInputFileType()." is not currently supported for watermarking.");
     }
@@ -309,20 +327,38 @@ class Watermark
     // CHECK COMMON SETTINGS
     $this->validateCommon();
 
-    // CHECK SPECIFIC SETTINGS
-    switch ($this->getWmType()) {
-      case self::WM_TYPE_TEXT:
-        $this->validateImageText();
-        break;
+    if($this->isInputAnImage()) {
+      // CHECK SPECIFIC SETTINGS
+      switch ($this->getWmType()) {
+        case self::WM_TYPE_TEXT:
+          $this->validateImageText();
+          break;
 
-      case self::WM_TYPE_IMAGE:
-        $this->validateImageImage();
-        break;
+        case self::WM_TYPE_IMAGE:
+          $this->validateImageImage();
+          break;
 
-      default:
-        throw new \Exception("Error: An Invalid Type has been specified.");
-        break;
+        default:
+          throw new \Exception("Error: An Invalid Type has been specified.");
+          break;
+      }
+    } elseif ($this->isInputAnPdf()) {
+
+      switch ($this->getWmType()) {
+        case self::WM_TYPE_TEXT:
+          $this->validatePdfText();
+          break;
+
+        case self::WM_TYPE_IMAGE:
+          $this->validatePdfImage();
+          break;
+
+        default:
+          throw new \Exception("Error: An Invalid Type has been specified.");
+          break;
+      }
     }
+
   }
 
 
@@ -369,31 +405,25 @@ class Watermark
 
   private function validateImageText()
   {
-    // check font is installed
-    if (!in_array($this->getWmFont(), $this->fonts)) {
-      throw new \Exception("(WmFont) Error: The Font ".$this->getWmFont()." is not installed.");
-    }
-    // Check if FontSize is set
-    if ((!is_int($this->getWmFontSize())) || (!($this->getWmFontSize() >= $this->minFontSize))) {
-      throw new \Exception("(WmFontSize) Error: The Font Size has an invalid value of ".$this->getWmFontSize().". Valid values are an integer ".$this->minFontSize." or above.");
-    }
-    // Check Font Angle is set
-    if ((!is_int($this->getWmFontAngle())) || (!($this->getWmFontAngle() >= $this->minFontAngle)) || (!($this->getWmFontAngle() <= $this->maxFontAngle))) {
-      throw new \Exception("(WmFontAngle) Error: The Font Angle has an invalid value of ".$this->getWmFontAngle().". Valid values are integers between ".$this->minFontAngle." and ".$this->maxFontAngle.".");
-    }
-    // Check FontColour has valid values
-    if (($colourParts = explode(",", $this->getWmFontColour())) && (count($colourParts) == 3)) {
-      foreach ($colourParts as $key => $colourValue) {
-        if ((!($colourValue >= $this->minFontColour)) || (!($colourValue <= $this->maxFontColour))) {
-          throw new \Exception("(WmFontColour) Error: The Font Colour must have 3 values between ".$this->minFontColour." and ".$this->maxFontColour.". Submitted values '".$this->getWmFontColour()."'.");
-        }
-      }
-    } else {
-      throw new \Exception("(WmFontColour) Error: The Font Colour must have 3 values for RGB delimited by ',' comma. Submitted values '".$this->getWmFontColour()."'.");
-    }
+    $this->validateFont();
+  }
+
+  private function validatePdfText()
+  {
+    $this->validateFont();
   }
 
   private function validateImageImage()
+  {
+    $this->validateWatermarkImage();
+  }
+
+  private function validatePdfImage()
+  {
+    $this->validateWatermarkImage();
+  }
+
+  private function validateWatermarkImage()
   {
     $pathInfo = pathinfo($this->getWmImage());
     if ((!$this->getWmImage()) || (!$pathInfo['basename']) || (!isset($pathInfo['extension']))) {
@@ -433,6 +463,31 @@ class Watermark
     }
   }
 
+  private function validateFont()
+  {
+    // check font is installed
+    if (!in_array($this->getWmFont(), $this->fonts)) {
+      throw new \Exception("(WmFont) Error: The Font ".$this->getWmFont()." is not installed.");
+    }
+    // Check if FontSize is set
+    if ((!is_int($this->getWmFontSize())) || (!($this->getWmFontSize() >= $this->minFontSize))) {
+      throw new \Exception("(WmFontSize) Error: The Font Size has an invalid value of ".$this->getWmFontSize().". Valid values are an integer ".$this->minFontSize." or above.");
+    }
+    // Check Font Angle is set
+    if ((!is_int($this->getWmFontAngle())) || (!($this->getWmFontAngle() >= $this->minFontAngle)) || (!($this->getWmFontAngle() <= $this->maxFontAngle))) {
+      throw new \Exception("(WmFontAngle) Error: The Font Angle has an invalid value of ".$this->getWmFontAngle().". Valid values are integers between ".$this->minFontAngle." and ".$this->maxFontAngle.".");
+    }
+    // Check FontColour has valid values
+    if (($colourParts = explode(",", $this->getWmFontColour())) && (count($colourParts) == 3)) {
+      foreach ($colourParts as $key => $colourValue) {
+        if ((!($colourValue >= $this->minFontColour)) || (!($colourValue <= $this->maxFontColour))) {
+          throw new \Exception("(WmFontColour) Error: The Font Colour must have 3 values between ".$this->minFontColour." and ".$this->maxFontColour.". Submitted values '".$this->getWmFontColour()."'.");
+        }
+      }
+    } else {
+      throw new \Exception("(WmFontColour) Error: The Font Colour must have 3 values for RGB delimited by ',' comma. Submitted values '".$this->getWmFontColour()."'.");
+    }
+  }
 
   #----------------------------------------------------
   # WATERMARK OUTPUT FILE
@@ -625,6 +680,15 @@ class Watermark
   {
     return (($this->inputExt[$this->getInputFileExt()]['filetype'] == self::FILETYPE_IMAGE) ? TRUE : FALSE);
   }
+
+  /**
+   * Checks whether or not the input file is an image
+   */
+  private function isInputAnPdf()
+  {
+    return (($this->inputExt[$this->getInputFileExt()]['filetype'] == self::FILETYPE_PDF) ? TRUE : FALSE);
+  }
+
 
   #----------------------------------------------------
   # OUTPUT IMAGE
@@ -878,6 +942,18 @@ class Watermark
   }
 
   /**
+   * @param resource $source
+   * @param string $colourRGB
+   */
+  public function getAllocatedColour($source, $colourRGB = '0,0,0')
+  {
+    $colourParts = explode(",", $colourRGB);
+    return (($ret = imagecolorallocate($source, $colourParts[0], $colourParts[1], $colourParts[2]))
+      ? $ret
+      : imagecolorallocate($source, 0, 0, 0));
+  }
+
+  /**
    * @return string
    */
   public function getFontsPath()
@@ -950,9 +1026,11 @@ class Watermark
       throw new \Exception("Error: There was a problem Installing FontFile ".$fontFile." into folder ".$this->getFontsPath());
     }
 
-    // Refrash the fonts list
+    // Refresh the fonts list
     $this->setFonts();
   }
+
+
 
   public function uninstallFont($fontName)
   {

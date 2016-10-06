@@ -15,11 +15,11 @@ This package was created to allow watermarking of various file types.
 
 ## Supported File types
 
-| Images        | Others      |
-| ------------- |-------------|
-| jpg           | More to come|
-| gif           | &nbsp;      |
-| png           | &nbsp;      |
+| Images        | Documents   | Others      |
+| ------------- |-------------|-------------|
+| jpg           | pdf         | More to come|
+| gif           | &nbsp;      | &nbsp;      |
+| png           | &nbsp;      | &nbsp;      |
 
 
 ## Supported Watermark Images
@@ -33,36 +33,52 @@ This package was created to allow watermarking of various file types.
 As an alternative to a Watermark image, support is also available for TrueType Font watermarking with 360 degrees of rotation on the text.
 There are also methods to install and uninstall TrueType Fonts.
 
+> NOTE: When the InputFile is a PDF and WmType is Text, the 'WmText' Text will be converted to an Image before being placed on the PDF!
+
 
 ## Basic Usage
 `$params` can be specified on `$wm = new Watermark($params);`
 <br>or can be set with setters `$wm->setInputFile($params['InputFile']);`
 <br>or optionally be sent on the `$wm->apply($params);` method
 <br>or a mixture of either.
-```
-include_once 'watermark.php';
+```php
+<?php
+use Uzuzoo\Watermark\Watermark;
+
 $params = array(
   'InputFile' => 'images/image.jpg',
 );
 
-// Instantiate the Watermark Class
-$wm = new Watermark($params);
-
 // Start the Watermarking process
-$result = $wm->apply();
+try {
 
-// Return the watermarked File path & filename
-$output = $wm->getOutput();
+  // Instantiate the Watermark Class
+  $wm = new Watermark($params);
+
+  // Apply the Watermarking
+  $result = $wm->apply();
+
+  // Return the watermarked File path & filename
+  $output = $wm->getOutput();
+
+} catch (Exception $e) {
+
+  // Any validation errors will cause an Exception to be thrown
+  echo $e->getMessage();
+
+}
+
 ```
 
 ## Options
-Each option has a getter and setter, and can used by prefixing the option name with set or get respectively. E.G. to set the InputFile use `$wm->setInputFile()` and to get `$wm->getInputFile()`
+Options can be passed, as an array, into the constructor of Watermark or on the apply method.<br>
+Alternatively, each option has a getter and setter, and can used by prefixing the option name with set or get respectively. E.G. to set the InputFile use `$wm->setInputFile()` and to get `$wm->getInputFile()`
 
 | Option Name |  Default | Type | Description |
 |-------------|----------|------|-------------|
 | InputFile   |         | string| The File that is to have the watermark applied              
-| OutputPath  | | string | Where the resulting file is to be saved. If not specified it will try to save in the same directory of the InputFile     
-| FontsPath  | ./watermark/fonts/ | string | Where the TrueType Fonts are located, relative to the Watermark Class.    
+| OutputPath  | | string | Path to where the resulting file is to be saved. If not specified it will try to save in the same directory as the InputFile     
+| FontsPath  | [Package]/Watermark/Fonts/ | string | Path to the TrueType Fonts.    
 | OutputFilePrefix  | "watermark" |string| Prefix for the output filename    
 | OutputFileOverwrite  | FALSE |boolean| Allow overwriting of existing files for the output
 | WmFont | "arial.ttf" |string| TrueType Font to Use |
