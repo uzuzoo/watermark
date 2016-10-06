@@ -1,7 +1,7 @@
 {
   "name": "uzuzoo/watermark",
   "description": "Watermark Different File Types",
-  "keywords": ["watermark"],
+  "keywords": ["watermark", "watermark images", "watermark pdf"],
   "homepage": "https://github.com/uzuzoo/watermark",
   "type": "library",
   "license": "MIT",
