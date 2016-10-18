@@ -670,6 +670,8 @@ class Watermark
       if ($type = mime_content_type($filename)) {
         $ret = $type;
       }
+    } else {
+      throw new \Exception("Error: PHP Functions \"finfo_open\" and \"mime_content_type\" do not exist.");
     }
     return $ret;
   }
