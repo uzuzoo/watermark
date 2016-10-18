@@ -320,7 +320,7 @@ class Watermark
       $this->setInputFileExt(strtolower($pathInfo['extension']));
       $this->setInputFileType($fileType);
     } else {
-      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." does has an unsupported Mime Type.");
+      throw new \Exception("(InputFile) Error: The InputFile ".$this->getInputFile()." has an unsupported Mime Type of (".$fileType.").");
     }
     // Set the OutputFileName
     $this->setOutputFileName($this->createOutputFileName());
