@@ -398,7 +398,7 @@ class Watermark
     }
 
     // check valid Padding
-    if (!is_int($this->getWmPadding())) {
+    if (!is_numeric($this->getWmPadding())) {
       throw new \Exception("(WmPadding) Error: The padding must be an integer.");
     }
   }
@@ -449,18 +449,18 @@ class Watermark
     }
 
     // Check Watermark Height
-    if ((!is_int($this->getWmImageHeight())) || (!($this->getWmImageHeight() >= $this->minHeight))) {
+    if ((!is_numeric($this->getWmImageHeight())) || (!($this->getWmImageHeight() >= $this->minHeight))) {
       throw new \Exception("(WmImageHeight) Error: The Watermark Image Height has an invalid value. A valid value must be an integer of ".$this->minHeight." or above.");
     }
 
     // Check Watermark Width
-    if ((!is_int($this->getWmImageWidth())) || (!($this->getWmImageWidth() >= $this->minWidth))) {
+    if ((!is_numeric($this->getWmImageWidth())) || (!($this->getWmImageWidth() >= $this->minWidth))) {
       throw new \Exception("(WmImageWidth) Error: The Watermark Image Width has an invalid value. A valid value must be an integer of ".$this->minWidth." or above.");
     }
 
     // Check Watermark Opacity
-    if ((!is_int($this->getWmImageOpacity())) || (($this->getWmImageOpacity() < $this->minOpacity)) || (($this->getWmImageOpacity() > $this->maxOpacity))) {
-      throw new \Exception("(WmImageWidth) Error: The Watermark Image Opacity has an invalid value. A valid value must be an integer between ".$this->minOpacity." and ".$this->maxOpacity.".");
+    if ((!is_numeric($this->getWmImageOpacity())) || (($this->getWmImageOpacity() < $this->minOpacity)) || (($this->getWmImageOpacity() > $this->maxOpacity))) {
+      throw new \Exception("(WmImageOpacity) Error: The Watermark Image Opacity has an invalid value. A valid value must be an integer between ".$this->minOpacity." and ".$this->maxOpacity.".");
     }
   }
 
@@ -471,11 +471,11 @@ class Watermark
       throw new \Exception("(WmFont) Error: The Font ".$this->getWmFont()." is not installed.");
     }
     // Check if FontSize is set
-    if ((!is_int($this->getWmFontSize())) || (!($this->getWmFontSize() >= $this->minFontSize))) {
+    if ((!is_numeric($this->getWmFontSize())) || (!($this->getWmFontSize() >= $this->minFontSize))) {
       throw new \Exception("(WmFontSize) Error: The Font Size has an invalid value of ".$this->getWmFontSize().". Valid values are an integer ".$this->minFontSize." or above.");
     }
     // Check Font Angle is set
-    if ((!is_int($this->getWmFontAngle())) || (!($this->getWmFontAngle() >= $this->minFontAngle)) || (!($this->getWmFontAngle() <= $this->maxFontAngle))) {
+    if ((!is_numeric($this->getWmFontAngle())) || (!($this->getWmFontAngle() >= $this->minFontAngle)) || (!($this->getWmFontAngle() <= $this->maxFontAngle))) {
       throw new \Exception("(WmFontAngle) Error: The Font Angle has an invalid value of ".$this->getWmFontAngle().". Valid values are integers between ".$this->minFontAngle." and ".$this->maxFontAngle.".");
     }
     // Check FontColour has valid values
@@ -677,7 +677,7 @@ class Watermark
   /**
    * Checks whether or not the input file is an image
    */
-  private function isInputAnImage()
+  public function isInputAnImage()
   {
     return (($this->inputExt[$this->getInputFileExt()]['filetype'] == self::FILETYPE_IMAGE) ? TRUE : FALSE);
   }
@@ -685,7 +685,7 @@ class Watermark
   /**
    * Checks whether or not the input file is an image
    */
-  private function isInputAnPdf()
+  public function isInputAnPdf()
   {
     return (($this->inputExt[$this->getInputFileExt()]['filetype'] == self::FILETYPE_PDF) ? TRUE : FALSE);
   }
@@ -952,6 +952,14 @@ class Watermark
     return (($ret = imagecolorallocate($source, $colourParts[0], $colourParts[1], $colourParts[2]))
       ? $ret
       : imagecolorallocate($source, 0, 0, 0));
+  }
+
+  /**
+   * Get Available Font Names
+   */
+  public function getFonts()
+  {
+    return $this->fonts;
   }
 
   /**
