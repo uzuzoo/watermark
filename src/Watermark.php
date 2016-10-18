@@ -62,7 +62,7 @@ class Watermark
    * Path to the Fonts
    * @var string
    */
-  public $FontsPath = __DIR__.'/Watermark/Fonts/';
+  public $FontsPath = '';
 
   /**
    * @var string
@@ -262,6 +262,7 @@ class Watermark
     if (!$this->gdLibraryExists()) {
       throw new \Exception("Error: GD Library is not installed on this web sever");
     }
+    $this->FontsPath = __DIR__.'/Watermark/Fonts/';
     $this->setFonts();
     $this->setParams($params);
   }

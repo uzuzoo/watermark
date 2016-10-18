@@ -59,12 +59,11 @@ class Pdf extends WmAbstract
       );
       // Set correct orientation
       $this->pdf->addPage($pageSize['height'] > $pageSize['width'] ? 'P' : 'L');
-      $this->pdf->useTemplate($tplidx);
-
       // Get Watermark Position for current page
-      $wmPosition = $this->getWmImagePosition($pageSize, $this->Wm->getWmPosition(), $wmSizes, $this->Wm->getWmPadding());
+      $wmPosition = $this->getWmImagePosition($pageSize, $wmSizes);
       // Apply the Watermark to the PDF Page
       $this->pdf->Image($tmpWmImage, $wmPosition['x'], $wmPosition['y']);
+      $this->pdf->useTemplate($tplidx);
     }
     // Unlink Temp WmImage
     if(!$this->debug) {
@@ -76,6 +75,10 @@ class Pdf extends WmAbstract
   }
 
 
+  /**
+   * Create the Watermark Image from text or the supplied watermark image
+   * @return string Path and filename of generated watermark image
+   */
   private function generateWatermark()
   {
     $isImageWatermark = (($this->Wm->getWmType() == Watermark::WM_TYPE_IMAGE) ? TRUE : FALSE);
@@ -110,7 +113,7 @@ class Pdf extends WmAbstract
 
       // Get a colour that is not the font colour so we can set it as the transparency
 
-      // --------- Tried the bolow but it didn't work as good as expected
+      // --------- Tried the below but it didn't work as good as expected
       // Lets set the transparency to a colour close to the font colour
       // $transColour = explode(",", $this->Wm->getWmFontColour());
       // $diff = 5;
@@ -131,6 +134,14 @@ class Pdf extends WmAbstract
     return $this->tmpWmImage;
   }
 
+
+
+  /**
+   * Set Image opacity pixel by pixel
+   * @param mixed $imageSrc
+   * @param mixed $opacity
+   * @return resource Image
+   */
   private function imagesetopacity( $imageSrc, $opacity )
   {
     // Opacity value needs converting
@@ -161,8 +172,16 @@ class Pdf extends WmAbstract
     return $imageDst;
   }
 
-  private function getWmImagePosition($pageSize, $position, $wmSizes, $padding)
+
+
+  /**
+   * @param array $pageSize = array('width' => float, 'height' => float) number of millimeters
+   * @param mixed $wmSizes = array('width' => px, 'height' => px) in pixels
+   * @return array x and y millimeter position
+   */
+  private function getWmImagePosition($pageSize, $wmSizes)
   {
+    $padding = $this->Wm->getWmPadding();
     $posX = 0;
     $posY = 0;
 
@@ -235,6 +254,11 @@ class Pdf extends WmAbstract
   }
 
 
+  /**
+   * Load an Image
+   * @param mixed $ext
+   * @param mixed $file
+   */
   private function loadImage($ext, $file)
   {
     $ret = FALSE;
@@ -271,6 +295,7 @@ class Pdf extends WmAbstract
      * @param mixed $imgResource Image resource to be resized
      * @param int $newH
      * @param int $newW
+     * @return resource Image
      */
     private function resizeImageResource($imgResource, $newH, $newW)
     {
