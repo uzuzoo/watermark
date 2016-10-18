@@ -262,6 +262,10 @@ class Watermark
     if (!$this->gdLibraryExists()) {
       throw new \Exception("Error: GD Library is not installed on this web sever");
     }
+    // Check the Get Mime Type functions Exists
+    if (!$this->mimeTypeFunctionsExists()) {
+      throw new \Exception("Error: PHP Functions \"finfo_open\" and \"mime_content_type\" do not exist.");
+    }
     $this->FontsPath = __DIR__.'/Watermark/Fonts/';
     $this->setFonts();
     $this->setParams($params);
@@ -1076,6 +1080,14 @@ class Watermark
   private function gdLibraryExists()
   {
       return (((extension_loaded('gd')) && function_exists('gd_info')) ? TRUE : FALSE);
+  }
+
+  /**
+   * Check to see if Required PHP Functions Exist
+   */
+  private function mimeTypeFunctionsExists()
+  {
+    return ((function_exists('finfo_open') || function_exists('mime_content_type')) ? TRUE : FALSE);
   }
 
   /**
